@@ -1,0 +1,38 @@
+from functions import osvjezi_rjecnik, stepen_dvojke
+
+rjecnik = dict()
+pocetna_duzina = 8 + 2
+for i in range(256):
+    rjecnik[str(i)] = bin(i)
+    temp = len(rjecnik[str(i)])
+    if temp < pocetna_duzina:
+        rjecnik[str(i)] = rjecnik[str(i)][0:2] + (pocetna_duzina-temp)*'0' + rjecnik[str(i)][2:]
+
+index = 256
+
+poruka = [123, 145, 16, 12, 12, 12, 12, 12, 123, 12, 12, 11, 14]
+duzina = len(poruka)
+kod = ''
+i = 0
+while i < duzina - 1:
+    elem = str(poruka[i]) + " " + str(poruka[i+1])
+    i += 1
+    while elem in rjecnik and i < duzina - 1:
+        i += 1
+        elem += " " + str(poruka[i])
+    if elem in rjecnik:
+        print(f'kodiramo:{elem}')
+        kod += " " + elem
+    else:
+        print(f'kodiramo:{" ".join(elem.split()[:-1])}')
+        kod += " " + " ".join(elem.split()[:-1])
+        if i == duzina - 1:
+            print(f'kodiramo:{elem.split()[-1]}')
+            kod += " " + elem.split()[-1]
+        if stepen_dvojke(index):
+            osvjezi_rjecnik(rjecnik)
+        rjecnik[elem] = bin(index)
+        print(f'u rjecnik dodato: {elem}')
+        index += 1
+print(f'Kodirana: {kod}')
+print(f'Originalna: {poruka}')
